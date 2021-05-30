@@ -1,0 +1,6 @@
+﻿  opencv.cpp
+C:\Users\georg\source\repos\opencv\opencv\opencv.cpp(12,33): warning C4129: 'g': unrecognized character escape sequence
+C:\Users\georg\source\repos\opencv\opencv\opencv.cpp(12,33): warning C4129: 'O': unrecognized character escape sequence
+C:\Users\georg\source\repos\opencv\opencv\opencv.cpp(12,33): warning C4129: 'D': unrecognized character escape sequence
+C:\Users\georg\source\repos\opencv\opencv\opencv.cpp(12,33): warning C4129: 'i': unrecognized character escape sequence
+  opencv.vcxproj -> C:\Users\georg\source\repos\opencv\x64\Debug\opencv.exe

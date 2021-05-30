@@ -1,0 +1,18 @@
+﻿  opencv.cpp
+C:\Users\georg\source\repos\opencv\opencv\opencv.cpp(23,22): warning C4244: '=': conversion from 'double' to '_Tp', possible loss of data
+          with
+          [
+              _Tp=float
+          ]
+C:\Users\georg\source\repos\opencv\opencv\opencv.cpp(24,22): warning C4244: '=': conversion from 'double' to '_Tp', possible loss of data
+          with
+          [
+              _Tp=float
+          ]
+C:\Users\georg\source\repos\opencv\opencv\opencv.cpp(54,22): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+  Generating code
+  2 of 97 functions ( 2.1%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Finished generating code
+  opencv.vcxproj -> C:\Users\georg\source\repos\opencv\x64\Release\opencv.exe
