@@ -12,10 +12,25 @@ const double PI = 3.141592653589793;
 const string PATH_IMAGE = "C:/Users/georg/OneDrive/Desktop/img11.png";
 const int ESC = 27;
 
+Point2f findFisheyePanoramic(int Xe, int Ye, double R, double Cfx, double Cfy, double He, double We) {
+    Point2f fisheyePoint;
+    double theta, r, Xf, Yf; //Polar coordinates
+
+    r = Ye / He * R;
+    theta = Xe / We * 2.0 * PI;
+    Xf = Cfx + r * sin(theta);
+    Yf = Cfy + r * cos(theta);
+    fisheyePoint.x = Xf;
+    fisheyePoint.y = Yf;
+
+    return fisheyePoint;
+}
+
+
 //Find the corresponding fisheye outpout point corresponding to an input cartesian point
-Point2f findFisheye(int Xe, int Ye, double R, double Cfx, double Cfy, double He, double We,int Hf, int Wf) {
+Point2f findFisheyeProjection(int Xe, int Ye, double R, double Cfx, double Cfy, double He, double We,int Hf, int Wf) {
    
-    Point2f pfish;
+       Point2f pfish;
        float theta, phi, r;
        Point3f psph;
     //
@@ -112,7 +127,7 @@ int main(int argc, char** argv) {
     for (int Xe = 0; Xe < equirectangularImage.size().width; Xe++) {
         for (int Ye = 0; Ye < equirectangularImage.size().height; Ye++) {
 
-            equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheye(Xe, Ye, R, Cfx, Cfy, He, We,Hf,Wf));
+            equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyeProjection(Xe, Ye, R, Cfx, Cfy, He, We,Hf,Wf));
         }
     }
 
