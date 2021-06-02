@@ -9,7 +9,7 @@ using namespace std;
 using namespace cv;
 
 const double PI = 3.141592653589793;
-const string PATH_IMAGE = "C:/Users/georg/OneDrive/Desktop/img2.png";
+const string PATH_IMAGE = "C:/Users/georg/OneDrive/Desktop/img11.png";
 const int ESC = 27;
 
 Point2f findFisheyePanoramic(int Xe, int Ye, double R, double Cfx, double Cfy, double He, double We) {
@@ -27,22 +27,23 @@ Point2f findFisheyePanoramic(int Xe, int Ye, double R, double Cfx, double Cfy, d
 }
 
 
-//Find the corresponding fisheye outpout point corresponding to an input cartesian point
-Point2f findFisheyeProjection(int Xe, int Ye, double R, double Cfx, double Cfy, double He, double We, int Hf, int Wf) {
+Point2f findFisheyeProjection(int Xe, int Ye, double R, double Cfx, double Cfy, int Hf, int Wf) {
 
     Point2f pfish;
-    float theta, phi, r;
+    double theta, phi, r;
     Point3f psph;
     //
     float FOV = 3.141592654; // FOV of the fisheye, eg: 180 degrees  
     float width = Wf;
     float height = Hf;
     //
-    //    // Polar angles  
-    theta = 2.0 * 3.14159265 * (Xe / width - 0.5); // -pi to pi  
-    phi = 3.14159265 * (Ye / height - 0.5);  // -pi/2 to pi/2  
- //
- //    // Vector in 3D space  
+    //   
+
+    theta = 2*3.14159265 * ((double)Xe / (double)width - 0.5f);// -pi to pi  
+    phi = 3.14159265 * ((double)Ye /(double)height - 0.5f);  // -pi/2 to pi/2 
+
+    //
+    //    // Vector in 3D space  
     psph.x = cos(phi) * sin(theta);
     psph.y = cos(phi) * cos(theta);
     psph.z = sin(phi);
@@ -87,12 +88,12 @@ int main(int argc, char** argv) {
     He = (int)R;
     We = (int)2 * PI * R;
 
-    equirectangularImage.create(He, We, fisheyeImage.type());
+    equirectangularImage.create(Hf, Wf, fisheyeImage.type());
 
     for (int Xe = 0; Xe < equirectangularImage.size().width; Xe++) {
         for (int Ye = 0; Ye < equirectangularImage.size().height; Ye++) {
 
-            equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyePanoramic(Xe, Ye, R, Cfx, Cfy, He, We));
+            equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyeProjection(Xe, Ye, R, Cfx, Cfy,Hf,Wf));
         }
     }
 
