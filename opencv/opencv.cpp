@@ -39,7 +39,7 @@ Point2f findFisheyeProjection(int Xe, int Ye, double R, double Cfx, double Cfy, 
     //
     //   
 
-    theta = 2*3.14159265 * ((double)Xe / (double)width - 0.5f);// -pi to pi  
+    theta = 3.14159265 * ((double)Xe / (double)width - 0.5f);// -pi to pi  
     phi = 3.14159265 * ((double)Ye /(double)height - 0.5f);  // -pi/2 to pi/2 
 
     //
@@ -88,12 +88,24 @@ int main(int argc, char** argv) {
     He = (int)R;
     We = (int)2 * PI * R;
 
-    equirectangularImage.create(Hf, Wf, fisheyeImage.type());
+    bool sw = true;
+
+    if (!sw) {
+        equirectangularImage.create(He, We, fisheyeImage.type());
+    }
+    else {
+        equirectangularImage.create(Hf, Wf, fisheyeImage.type());
+    }
 
     for (int Xe = 0; Xe < equirectangularImage.size().width; Xe++) {
         for (int Ye = 0; Ye < equirectangularImage.size().height; Ye++) {
 
-            equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyeProjection(Xe, Ye, R, Cfx, Cfy,Hf,Wf));
+            if (!sw) {
+                equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyePanoramic(Xe, Ye, R, Cfx, Cfy, He, We));
+            }
+            else {
+                equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyeProjection(Xe, Ye, R, Cfx, Cfy, Hf, Wf));
+            }
         }
     }
 
