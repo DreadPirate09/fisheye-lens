@@ -99,7 +99,7 @@ int main(int argc, char** argv) {
     namedWindow("Equirectangular Image", WINDOW_AUTOSIZE);
     imshow("Equirectangular Image", equirectangularImage);
 
-    while (waitKey(0) != ESC) {
+    while (waitKey(0) != ESC) { 
         //wait until the key ESC is pressed
     }
 
