@@ -48,7 +48,7 @@ Point2f findFisheyePanoramic(int Xe, int Ye, double R, double Cfx, double Cfy, d
 }
 
 
-Point2f findFisheyeProjection(int Xe, int Ye, double R, double Cfx, double Cfy, int Hf, int Wf) {
+Point2f findFisheyeProjection(int Xe, int Ye, double R, int Hf, int Wf) {
 
     Point2f pfish;
     double theta, phi, r;
@@ -120,7 +120,7 @@ int main(int argc, char** argv) {
                 equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyePanoramic(Xe, Ye, R, Cfx, Cfy, He, We));
             }
             else {
-                equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyeProjection(Xe, Ye, R, Cfx, Cfy, Hf, Wf));
+                equirectangularImage.at<Vec3b>(Point(Xe, Ye)) = fisheyeImage.at<Vec3b>(findFisheyeProjection(Xe, Ye, R, Hf, Wf));
             }
         }
     }
