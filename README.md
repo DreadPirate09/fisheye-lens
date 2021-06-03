@@ -1,2 +1,2 @@
 # fisheye-lens
-recreate the original photo
+Fisheye to spherical conversion and fisheye to rectilinear projection ( undo the fisheye to the original panorama )

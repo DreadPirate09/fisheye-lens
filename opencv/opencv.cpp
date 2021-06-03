@@ -12,9 +12,30 @@ const double PI = 3.141592653589793;
 const string PATH_IMAGE = "C:/Users/georg/OneDrive/Desktop/img11.png";
 const int ESC = 27;
 
+double getPSNR(const Mat& I1, const Mat& I2)
+{
+    Mat s1;
+    absdiff(I1, I2, s1);
+    s1.convertTo(s1, CV_32F);
+    s1 = s1.mul(s1);
+
+    Scalar s = sum(s1);
+
+    double sse = s.val[0] + s.val[1] + s.val[2];
+
+    if (sse <= 1e-10)
+        return 0;
+    else
+    {
+        double  mse = sse / (double)(I1.channels() * I1.total());
+        double psnr = 10.0 * log10((255 * 255) / mse);
+        return psnr;
+    }
+}
+
 Point2f findFisheyePanoramic(int Xe, int Ye, double R, double Cfx, double Cfy, double He, double We) {
     Point2f fisheyePoint;
-    double theta, r, Xf, Yf; //Polar coordinates
+    double theta, r, Xf, Yf;
 
     r = Ye / He * R;
     theta = Xe / We * 2.0 * PI;
@@ -32,28 +53,22 @@ Point2f findFisheyeProjection(int Xe, int Ye, double R, double Cfx, double Cfy, 
     Point2f pfish;
     double theta, phi, r;
     Point3f psph;
-    //
-    float FOV = 3.141592654; // FOV of the fisheye, eg: 180 degrees  
+
+    float FOV = 3.141592654; 
     float width = Wf;
     float height = Hf;
-    //
-    //   
 
-    theta = 3.14159265 * ((double)Xe / (double)width - 0.5f);// -pi to pi  
-    phi = 3.14159265 * ((double)Ye /(double)height - 0.5f);  // -pi/2 to pi/2 
-
-    //
-    //    // Vector in 3D space  
+    theta = 3.14159265 * ((double)Xe / (double)width - 0.5f);
+    phi = 3.14159265 * ((double)Ye /(double)height - 0.5f);  
+ 
     psph.x = cos(phi) * sin(theta);
     psph.y = cos(phi) * cos(theta);
     psph.z = sin(phi);
-    //
-    //    // Calculate fisheye angle and radius  
+
     theta = atan2(psph.z, psph.x);
     phi = atan2(sqrt(psph.x * psph.x + psph.z * psph.z), psph.y);
     r = width * phi / FOV;
-    //
-    //    // Pixel in fisheye space  
+    
     pfish.x = 0.5 * width + r * cos(theta);
     pfish.y = 0.5 * width + r * sin(theta);
 
@@ -69,29 +84,30 @@ int main(int argc, char** argv) {
     namedWindow("Fisheye Image", WINDOW_AUTOSIZE);
     imshow("Fisheye Image", fisheyeImage);
 
+    cout << "Press ESC to procede" << endl;
 
     while (waitKey(0) != ESC) {
-        //wait until the key ESC is pressed
+        // wait until the key ESC is pressed
     }
 
-    //destroyWindow("Fisheye Image");
 
     int Hf, Wf, He, We;
     double R, Cfx, Cfy;
 
     Hf = fisheyeImage.size().height;
     Wf = fisheyeImage.size().width;
-    R = Hf / 2; //The fisheye image is a square of 1400x1400 pixels containing a circle so the radius is half of the width or height size
-    Cfx = Wf / 2; //The fisheye image is a square so the center in x is located at half the distance of the width
-    Cfy = Hf / 2; //The fisheye image is a square so the center in y is located at half the distance of the height
+    R = Hf / 2;
+    Cfx = Wf / 2; 
+    Cfy = Hf / 2; 
 
     He = (int)R;
     We = (int)2 * PI * R;
 
-    bool sw = true;
+    bool sw = true;  // false for panoramal images and true for projections
 
     if (!sw) {
         equirectangularImage.create(He, We, fisheyeImage.type());
+        cout << "here" << endl;
     }
     else {
         equirectangularImage.create(Hf, Wf, fisheyeImage.type());
@@ -109,16 +125,23 @@ int main(int argc, char** argv) {
         }
     }
 
+    if (sw) {
+        cout << "The PSNR " << getPSNR(fisheyeImage, equirectangularImage) << endl; // we do the Peak of the signal ratio just for sqare images
+    }
+
+    cout << "here" << endl;
+
     namedWindow("Equirectangular Image", WINDOW_AUTOSIZE);
     imshow("Equirectangular Image", equirectangularImage);
 
+    cout << "Press ESC to end" << endl;
     while (waitKey(0) != ESC) { 
         //wait until the key ESC is pressed
     }
 
+    imwrite("C:/Users/georg/OneDrive/Desktop/img.jpg", equirectangularImage);
     //destroyWindow("Fisheye Image");
 
-    imwrite("C:/Users/georg/OneDrive/Desktop/equirectangularImage.jpg", equirectangularImage);
 
     return 0;
 }
