@@ -9,7 +9,7 @@ using namespace std;
 using namespace cv;
 
 const double PI = 3.141592653589793;
-const string PATH_IMAGE = "C:/Users/georg/OneDrive/Desktop/img11.png";
+const string PATH_IMAGE = "C:/Users/georg/OneDrive/Desktop/fisheyepan.jpg";
 const int ESC = 27;
 
 double getPSNR(const Mat& I1, const Mat& I2)
@@ -103,7 +103,7 @@ int main(int argc, char** argv) {
     He = (int)R;
     We = (int)2 * PI * R;
 
-    bool sw = true;  // false for panoramal images and true for projections
+    bool sw = false;  // false for panoramal images and true for projections
 
     if (!sw) {
         equirectangularImage.create(He, We, fisheyeImage.type());
@@ -133,13 +133,13 @@ int main(int argc, char** argv) {
 
     namedWindow("Equirectangular Image", WINDOW_AUTOSIZE);
     imshow("Equirectangular Image", equirectangularImage);
+    imwrite("C:/Users/georg/OneDrive/Desktop/img.jpg", equirectangularImage);
 
     cout << "Press ESC to end" << endl;
     while (waitKey(0) != ESC) { 
         //wait until the key ESC is pressed
     }
 
-    imwrite("C:/Users/georg/OneDrive/Desktop/img.jpg", equirectangularImage);
     //destroyWindow("Fisheye Image");
 
 
